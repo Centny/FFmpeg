@@ -830,7 +830,9 @@ static int udp_open(URLContext *h, const char *uri, int flags)
      */
     if (s->reuse_socket > 0 || (s->is_multicast && s->reuse_socket < 0)) {
         s->reuse_socket = 1;
-        if (setsockopt (udp_fd, SOL_SOCKET, SO_REUSEADDR, &(s->reuse_socket), sizeof(s->reuse_socket)) != 0)
+        if (setsockopt(udp_fd, SOL_SOCKET, SO_REUSEADDR, &(s->reuse_socket), sizeof(s->reuse_socket)) != 0)
+            goto fail;
+        if (setsockopt(udp_fd, SOL_SOCKET, SO_REUSEPORT, &(s->reuse_socket), sizeof(s->reuse_socket)) != 0)
             goto fail;
     }
 
